@@ -39,7 +39,7 @@ This project implements the PDF workflow as a small hybrid cloud-native app with
 ```bash
 docker compose up --build
 ```
-Then open `http://localhost:8000`.
+Then open http://localhost:8000.
 
 If you face the issue was caused by network restrictions in the campus local area network, where the intranet firewall blocked external access required by Docker, use the follow method.
 ### method two：
