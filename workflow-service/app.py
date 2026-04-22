@@ -1,12 +1,18 @@
 '''
 Author: borui li 101801839+dalele2002@users.noreply.github.com
 Date: 2026-04-21 20:16:11
-LastEditors: borui li 101801839+dalele2002@users.noreply.github.com
-LastEditTime: 2026-04-22 09:45:02
+LastEditors: dalele2002 dagujie@126.com
+LastEditTime: 2026-04-22 16:51:49
 FilePath: \campus-activity-review-system-main\workflow-service\app.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
 from __future__ import annotations
+
+import sys
+import os
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
+# 新增的路径修复代码 ↑
 
 import os
 from typing import Any
