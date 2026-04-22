@@ -43,19 +43,26 @@ Then open http://localhost:8000.
 
 If you face the issue was caused by network restrictions in the campus local area network, where the intranet firewall blocked external access required by Docker, use the follow method.
 ### method two：
-1. Start the data-service (8002)
+1. Activate the virtual environment
 ```bash
-set PYTHONPATH=%cd%
-uvicorn data-service.app:app --host 127.0.0.1 --port 8002 --reload
+venv\Scripts\activate
 ```
-2. Start workflow-service（8001）
+2. Start the data-service (8002)
 ```bash
-set PYTHONPATH=%cd%
-uvicorn workflow-service.app:app --host 127.0.0.1 --port 8001 --reload
+cd data-service
+uvicorn app:app --reload --port 8002
 ```
-3. Start demo-service（8000）
+3. Start workflow-service（8001）
 ```bash
-uvicorn demo-service.app:app --host 127.0.0.1 --port 8000 --reload
+venv\Scripts\activate
+cd workflow-service
+uvicorn app:app --reload --port 8001
+```
+4. Start demo-service（8000）
+```bash
+venv\Scripts\activate
+cd demo-service
+uvicorn app:app --reload --port 8000
 ```
 Then open http://localhost:8000.
 
