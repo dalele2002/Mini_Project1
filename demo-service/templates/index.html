@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Activity Review</title>
+    <style>
+        :root {
+            --bg: #f5efe3;
+            --panel: #fffaf0;
+            --ink: #172121;
+            --accent: #b85c38;
+            --accent-dark: #7f3b20;
+            --muted: #5f6b6d;
+            --border: #d7c6ad;
+            --approved: #256f4a;
+            --revision: #a05a16;
+            --incomplete: #8a2435;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top right, rgba(184, 92, 56, 0.18), transparent 24rem),
+                linear-gradient(160deg, #f7f1e6 0%, #ebe1cf 100%);
+            min-height: 100vh;
+        }
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+        .hero {
+            margin-bottom: 28px;
+        }
+        h1 {
+            margin: 0 0 12px;
+            font-size: clamp(2.2rem, 4vw, 4rem);
+            letter-spacing: 0.03em;
+        }
+        .subtitle {
+            max-width: 760px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 22px;
+        }
+        .card {
+            background: rgba(255, 250, 240, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 18px 42px rgba(76, 53, 32, 0.08);
+            backdrop-filter: blur(8px);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.35rem;
+        }
+        form {
+            display: grid;
+            gap: 14px;
+        }
+        label {
+            display: grid;
+            gap: 6px;
+            font-weight: bold;
+        }
+        input, textarea, button {
+            font: inherit;
+        }
+        input, textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            background: #fffdf8;
+        }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        button {
+            border: 0;
+            border-radius: 999px;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .lookup {
+            display: flex;
+            gap: 10px;
+        }
+        .lookup input { flex: 1; }
+        .status {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 999px;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+        }
+        .APPROVED { background: var(--approved); }
+        .NEEDS-REVISION { background: var(--revision); }
+        .INCOMPLETE { background: var(--incomplete); }
+        .error {
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: #fce8e3;
+            color: #7a1e1e;
+            margin-bottom: 14px;
+        }
+        dl {
+            margin: 16px 0 0;
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 10px 14px;
+        }
+        dt {
+            font-weight: bold;
+            color: var(--muted);
+        }
+        dd {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .hint {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .lookup {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <section class="hero">
+            <h1>Campus Activity Review Flow</h1>
+            <p class="subtitle">
+                Submit a campus event, let the workflow create a record, trigger automated review,
+                update the result, and then view the final status, category, priority, and explanation.
+            </p>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <h2>New Submission</h2>
+                {% if error %}
+                <div class="error">{{ error }}</div>
+                {% endif %}
+                <form method="post" action="/submit">
+                    <label>Title
+                        <input type="text" name="title" placeholder="AI Career Fair 2026">
+                    </label>
+                    <label>Description
+                        <textarea name="description" placeholder="Describe the event clearly. The automated review requires at least 40 characters."></textarea>
+                    </label>
+                    <label>Location
+                        <input type="text" name="location" placeholder="Main Library Hall">
+                    </label>
+                    <label>Date
+                        <input type="text" name="date" placeholder="2026-05-01">
+                    </label>
+                    <label>Organizer
+                        <input type="text" name="organizer" placeholder="Computer Science Society">
+                    </label>
+                    <button type="submit">Submit Activity</button>
+                </form>
+            </article>
+
+            <article class="card">
+                <h2>Lookup Result</h2>
+                <form method="post" action="/lookup">
+                    <div class="lookup">
+                        <input type="text" name="record_id" value="{{ record_id }}" placeholder="Paste a submission ID">
+                        <button type="submit">Load</button>
+                    </div>
+                </form>
+
+                {% if record %}
+                <div style="margin-top: 20px;">
+                    <span class="status {{ record.status|replace(' ', '-') }}">{{ record.status }}</span>
+                    <dl>
+                        <dt>Record ID</dt><dd>{{ record.id }}</dd>
+                        <dt>Category</dt><dd>{{ record.category }}</dd>
+                        <dt>Priority</dt><dd>{{ record.priority }}</dd>
+                        <dt>Reason</dt><dd>{{ record.reason }}</dd>
+                        <dt>Title</dt><dd>{{ record.title }}</dd>
+                        <dt>Location</dt><dd>{{ record.location }}</dd>
+                        <dt>Date</dt><dd>{{ record.date }}</dd>
+                        <dt>Organizer</dt><dd>{{ record.organizer }}</dd>
+                        <dt>Updated</dt><dd>{{ record.updated_at }}</dd>
+                    </dl>
+                </div>
+                {% else %}
+                <p class="hint">
+                    The result panel will show the final automated decision after the workflow stores
+                    the submission, runs processing, and writes the updated outcome back to the data service.
+                </p>
+                {% endif %}
+            </article>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+services:
+  demo-service:
+    build:
+      context: .
+      dockerfile: demo-service/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      WORKFLOW_SERVICE_URL: http://workflow-service:8001
+    depends_on:
+      - workflow-service
+
+  workflow-service:
+    build:
+      context: .
+      dockerfile: workflow-service/Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DATA_SERVICE_URL: http://data-service:8002
+    depends_on:
+      - data-service
+
+  data-service:
+    build:
+      context: .
+      dockerfile: data-service/Dockerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - submission-data:/data
+
+volumes:
+  submission-data:
