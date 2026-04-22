@@ -1,12 +1,10 @@
 # Campus Activity Review System
-
-This project implements the PDF workflow as a small hybrid cloud-native app with exactly:
+This project adopts a hybrid cloud-native architecture consisting of 3 containerized services for persistent, always-on capabilities, and 3 serverless functions for on-demand, event-driven business logic processing, forming a complete campus activity review workflow
 
 - 3 container services: `demo-service`, `workflow-service`, `data-service`
 - 3 serverless functions: `submission_event_function`, `processing_function`, `result_update_function`
 
 ## Workflow
-
 1. The user submits a campus activity in the demo service.
 2. The workflow service creates an initial record in the data service.
 3. The submission event function converts the new record into a processing request.
@@ -15,7 +13,6 @@ This project implements the PDF workflow as a small hybrid cloud-native app with
 6. The data service stores the final result, and the demo service shows it to the user.
 
 ## Rules implemented
-
 - All required fields must be present.
 - Missing required fields always produce `INCOMPLETE` and stop later rules from overriding that result.
 - Date must use `YYYY-MM-DD`.
@@ -67,13 +64,11 @@ uvicorn app:app --reload --port 8000
 Then open http://localhost:8000.
 
 ## Service ports
-
 - Demo UI: `8000`
 - Workflow API: `8001`
 - Data API: `8002`
 
 ## Example submission
-
 - Title: `AI Internship and Career Fair`
 - Description: `Meet recruiters, discuss internship opportunities, and learn how to prepare for technical interviews at the annual campus hiring event.`
 - Location: `Innovation Center`
